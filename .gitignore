@@ -1,0 +1,10 @@
+.env
+.env.production
+database/*.db
+__pycache__/
+*.pyc
+node_modules/
+frontend/build/
+check.py
+recreate_db.py
+test_groq.py

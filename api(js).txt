@@ -1,0 +1,61 @@
+api.js 
+
+const BASE = process.env.REACT_APP_API_URL || "http://localhost:8000";
+
+export const api = {
+  async submitComplaint(data) {
+    const r = await fetch(`${BASE}/complaint/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    return r.json();
+  },
+
+  async getComplaints() {
+    const r = await fetch(`${BASE}/complaint/`);
+    return r.json();
+  },
+
+  async updateStatus(id, status) {
+    const r = await fetch(`${BASE}/complaint/${id}/status?status=${status}`, { method: "PATCH" });
+    return r.json();
+  },
+
+  async sendChat(message) {
+    const r = await fetch(`${BASE}/chat/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message }),
+    });
+    return r.json();
+  },
+
+  async submitMaintenance(data) {
+    const r = await fetch(`${BASE}/maintenance/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    return r.json();
+  },
+
+  async getMaintenance() {
+    const r = await fetch(`${BASE}/maintenance/`);
+    return r.json();
+  },
+
+  async deployAction(action, target = "backend") {
+    const r = await fetch(`${BASE}/deploy/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action, target }),
+    });
+    return r.json();
+  },
+
+  async getDeployStatus() {
+    const r = await fetch(`${BASE}/deploy/status`);
+    return r.json();
+  },
+};
