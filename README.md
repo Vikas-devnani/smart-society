@@ -1,4 +1,4 @@
-# AI Smart Society Management System
+# AI Smart Society Management System 🏘️
 
 Full-stack AI-powered housing society management system using FastAPI, React, SQLite, Ollama, and CrewAI.
 
