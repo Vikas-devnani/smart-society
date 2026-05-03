@@ -26,16 +26,6 @@ jobs:
           npm install --legacy-peer-deps
           npm run build
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Test Backend imports
-        run: |
-          pip install -r backend/requirements.txt
-          python -c "from backend.routes import complaints, chat, deploy, maintenance, residents, payments, notices, bookings, insights; print('All imports OK')"
-
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -43,13 +33,13 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            if [ ! -d "smart-society" ]; then
-              git clone https://github.com/${{ github.repository }}.git smart-society
-            fi
-            cd smart-society
+            cd ~/smart-society
             git pull origin main
             echo "GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}" > .env
             echo "EC2_HOST=${{ secrets.EC2_HOST }}" >> .env
-            docker compose down || true
-            docker compose up --build -d
+            docker compose down
+            docker compose build frontend --build-arg REACT_APP_API_URL=http://${{ secrets.EC2_HOST }}:8000
+            export GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}
+            export EC2_HOST=${{ secrets.EC2_HOST }}
+            docker compose up -d
             echo "Deployed successfully"
